@@ -1,0 +1,130 @@
+﻿@model StudentAPIConsumeWebsite.Models.Details
+
+@{
+    ViewData["Title"] = "ManageStudents";
+}
+
+<script>
+    function checkEmpty() {
+        let txt = document.getElementById("search").value;
+    }
+</script>
+
+<div class="row">
+    <div class="offset-4 col-md-4">
+        <form asp-controller="Students" asp-action="ManageStudents" method="post" onsubmit="return checkEmpty()">
+            <div class="input-group mt-4">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-dark text-white">Enter Name</span>
+                </div>
+                <input type="text" class="form-control" id="search" name="str" />
+                <div class="input-group-prepend">
+                    <input type="submit" value="Search" class="btn btn-danger" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <h4>Student Details</h4>
+    <hr />
+    <table class="table table-bordered table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Student Name</th>
+            <th>Course Name</th>
+            <th>Course Description</th>
+            <th>Specialization</th>
+            <th>Delete</th>
+            <th>Edit</th>
+        </tr>
+
+        @foreach (var student in Model.GetStudents)
+        {
+            <tr>
+                <td>@student.Id</td>
+                <td>@student.Name</td>
+                <td>@student.Courses.CourseName</td>
+                <td>@student.Courses.CourseDescription</td>
+                <td>@student.Courses.Specialization</td>
+                <td>
+                    <a class="btn btn-danger btn-delete" data-url="@Url.Action("Delete", "Students", new { id = student.Id })">Delete</a>
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-controller="Students" asp-action="Edit" asp-route-id="@student.Id">Edit</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+
+@section Scripts {
+
+    <!-- Include SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include SweetAlert JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.btn-delete').on('click', function (event) {
+                event.preventDefault(); // Prevent the default link behavior
+
+                var deleteButton = $(this);
+                var actionUrl = deleteButton.data('url');
+
+                // Show the confirmation dialog using SweetAlert
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This action cannot be undone.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // User confirmed, redirect to the delete action
+                        window.location.href = actionUrl;
+                    }
+                });
+            });
+        });
+
+            @if (TempData["DeleteSuccess"] != null)
+            {
+                <text>
+                Swal.fire({
+                    title: 'Success',
+                    text: '@TempData["DeleteSuccess"]',
+                    icon: 'success',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 4000
+                });
+                </text>
+            }
+
+            @if (TempData["DeleteError"] != null)
+            {
+                <text>
+                Swal.fire({
+                    title: 'Error',
+                    text: '@TempData["DeleteError"]',
+                    icon: 'error',
+                    showCancelButton: false,
+                    showConfirmButton: false,
+                    timer: 4000
+                });
+                </text>
+            }
+
+    </script>
+}

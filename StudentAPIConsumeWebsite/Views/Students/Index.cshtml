@@ -1,0 +1,53 @@
+﻿@model StudentAPIConsumeWebsite.Models.Details
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div>
+    <h4>Student Details</h4>
+    <hr />
+    <table class="table table-bordered table-dark">
+        <tr>
+            <th>Id</th>
+            <th>Student Name</th>
+            <th>Course Name</th>
+            <th>Course Description</th>
+            <th>Specialization</th>
+        </tr>
+
+        @foreach(var student in Model.GetStudents)
+        {
+        <tr>
+            <td>@student.Id</td>
+            <td>@student.Name</td>
+            <td>@student.Courses.CourseName</td>
+            <td>@student.Courses.CourseDescription</td>
+            <td>@student.Courses.Specialization</td>
+        </tr>
+        }
+    </table>
+</div>
+
+<div>
+    <h4>Courses</h4>
+    <hr />
+    <table class="table table-bordered table-dark">
+        <tr>
+            <th>Course Name</th>
+            <th>Course Description</th>
+            <th>Specialization</th>
+        </tr>
+
+        @foreach (var course in Model.GetCourses)
+        {
+            <tr>
+                <td>@course.CourseName</td>
+                <td>@course.CourseDescription</td>
+                <td>@course.Specialization</td>
+            </tr>
+        }
+    </table>
+</div>
+
+

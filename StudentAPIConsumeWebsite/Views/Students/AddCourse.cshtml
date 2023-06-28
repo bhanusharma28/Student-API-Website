@@ -1,0 +1,75 @@
+﻿@model StudentAPIConsumeWebsite.Models.CoursePostModel
+
+@{
+    ViewData["Title"] = "AddCourse";
+}
+
+<h1>Add Course</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddCourse" id="addCourseForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="courseName" class="control-label"></label>
+                <input asp-for="courseName" class="form-control" />
+                <span asp-validation-for="courseName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="courseDescription" class="control-label"></label>
+                <input asp-for="courseDescription" class="form-control" />
+                <span asp-validation-for="courseDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="specialization" class="control-label"></label>
+                <input asp-for="specialization" class="form-control" />
+                <span asp-validation-for="specialization" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <!-- Include SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+    <!-- Include SweetAlert2 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+    <!-- Display SweetAlert2 notifications based on TempData values -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var successMessage = '@(TempData["SuccessMessage"] ?? "")';
+            var errorMessage = '@(TempData["ErrorMessage"] ?? "")';
+
+            if (successMessage !== '') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: successMessage,
+                    showConfirmButton: false,
+                    timer: 4000
+                });
+            }
+
+            if (errorMessage !== '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: errorMessage,
+                    showConfirmButton: false,
+                    timer: 4000
+                });
+            }
+        });
+    </script>
+}

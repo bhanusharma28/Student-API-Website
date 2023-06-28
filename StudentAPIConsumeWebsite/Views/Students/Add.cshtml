@@ -1,0 +1,75 @@
+﻿@model StudentAPIConsumeWebsite.Models.StudentPostModel
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+
+<h1>Add Student</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="addForm" asp-action="Add" asp-controller="Students" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CourseId" class="control-label">Course</label>
+                <select asp-for="CourseId" asp-items="@Model.Courses" class="form-control">
+                    <option value="">Select an option</option>
+                </select>
+                <span asp-validation-for="CourseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <!-- Include SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+    <!-- Include SweetAlert2 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+    <!-- Display SweetAlert2 notifications based on TempData values -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var successMessage = '@(TempData["SuccessMessage"] ?? "")';
+            var errorMessage = '@(TempData["ErrorMessage"] ?? "")';
+
+            if (successMessage !== '') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: successMessage,
+                    showConfirmButton: false,
+                    timer: 4000
+                });
+            }
+
+            if (errorMessage !== '') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: errorMessage,
+                    showConfirmButton: false,
+                    timer: 4000
+                });
+            }
+        });
+    </script>
+}

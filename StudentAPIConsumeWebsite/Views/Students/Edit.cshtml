@@ -1,0 +1,106 @@
+﻿@model StudentAPIConsumeWebsite.Models.StudentPutModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit Student</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="courseId" class="control-label">Course</label>
+                <select asp-for="courseId" asp-items="@Model.Courses" class="form-control"></select>
+                <span asp-validation-for="courseId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-outline-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <!-- Include SweetAlert CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include SweetAlert JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+
+                // Show a confirmation SweetAlert dialog
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Are you sure?',
+                    text: 'You are about to update this item.',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Update',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // User confirmed, submit the form
+                        form.unbind('submit').submit();
+                    } else if (result.isDismissed) {
+                        // User cancelled, show cancellation message
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Update Cancelled',
+                            text: 'Cancelled',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                });
+            });
+
+            // Show a success SweetAlert notification on successful update
+            @if (TempData["UpdateSuccess"] != null)
+            {
+                <text>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Update Successful',
+                        text: '@TempData["UpdateSuccess"]',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+                </text>
+            }
+
+                // Show an error SweetAlert notification if there was an error during update
+            @if (TempData["UpdateError"] != null)
+            {
+                <text>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Update Failed',
+                        text: '@TempData["UpdateError"]',
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+                </text>
+            }
+            });
+    </script>
+
+}
+
